@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Task } from '../../task/entities/task.entity';
 
 @Entity({ name: 'tb_lists' })
 export class Lists {
@@ -9,5 +10,8 @@ export class Lists {
   @IsNotEmpty()
   @Column({ length: 255, nullable: false })
   title: string;
+
+  @OneToMany(() => Task, (task) => task.list)
+  task: Task[];
   
 }
