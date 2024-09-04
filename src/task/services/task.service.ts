@@ -53,10 +53,10 @@ export class TaskService {
     return task;
   }
 
-  async findByTitle(title: string): Promise<Task[]> {
+  async findByTask(tasks: string): Promise<Task[]> {
     const task = await this.taskRepository.find({
       where: {
-        task: ILike(`%${title}%`),
+        task: ILike(`%${tasks}%`),
       },
     });
 
