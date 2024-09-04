@@ -5,10 +5,11 @@ import { Task } from '../entities/task.entity';
 
 @Injectable()
 export class TaskService {
+
   constructor(
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
-  ) {}
+  ) { }
 
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find();
@@ -44,7 +45,7 @@ export class TaskService {
     const task = await this.taskRepository.find({
       where: {
         order: LessThan(order),
-      }
+      },
     });
 
     if (!task)
@@ -53,10 +54,10 @@ export class TaskService {
     return task;
   }
 
-  async findByTitle(title: string): Promise<Task[]> {
+  async findByTask(tasks: string): Promise<Task[]> {
     const task = await this.taskRepository.find({
       where: {
-        task: ILike(`%${title}%`),
+        task: ILike(`%${tasks}%`),
       },
     });
 
