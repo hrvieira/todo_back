@@ -5,11 +5,10 @@ import { Task } from '../entities/task.entity';
 
 @Injectable()
 export class TaskService {
-
   constructor(
     @InjectRepository(Task)
     private taskRepository: Repository<Task>,
-  ) { }
+  ) {}
 
   async findAll(): Promise<Task[]> {
     return await this.taskRepository.find();
@@ -54,16 +53,22 @@ export class TaskService {
     return task;
   }
 
-  async findByTask(tasks: string): Promise<Task[]> {
-    const task = await this.taskRepository.find({
+  async findByDescription(description: string): Promise<Task[]> {
+    if (description.trim() === '') {
+      throw new HttpException(
+        'Description cannot be empty',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return await this.taskRepository.find({
       where: {
-        task: ILike(`%${tasks}%`),
+        description: ILike(`%${description}%`),
       },
     });
+  }
 
-    if (!task)
-      throw new HttpException('Título não encontrado!', HttpStatus.NOT_FOUND);
-
-    return task;
+  async create(task: Task): Promise<Task> {
+    return await this.taskRepository.save(task);
   }
 }

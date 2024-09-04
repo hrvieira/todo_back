@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { TaskService } from "../services/task.service";
 import { Task } from "../entities/task.entity";
 
@@ -12,15 +12,24 @@ export class TaskController {
     return this.taskService.findAll();
   }
 
-  @Get('/:order')
+  @Get('/description/:description')
+  @HttpCode(HttpStatus.OK)
+  findByDescription(
+    @Param('description') description: string,
+  ): Promise<Task[]> {
+    return this.taskService.findByDescription(description);
+  }
+
+  @Get('/order/:order')
   @HttpCode(HttpStatus.OK)
   findByOrder(@Param('order', ParseIntPipe) order: number): Promise<Task> {
     return this.taskService.findByOrder(order);
   }
 
-  @Get('/:task')
-  @HttpCode(HttpStatus.OK)
-  findByTask(@Param('task', ParseIntPipe) task: string): Promise<Task[]> {
-    return this.taskService.findByTask(task);
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() task: Task): Promise<Task> {
+    return this.taskService.create(task);
   }
+  
 }
