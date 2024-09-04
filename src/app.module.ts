@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './task/entities/task.entity';
 import { TaskModule } from './task/task.module';
+import { Lists } from './list/entities/list.entity';
+import { ListsModule } from './list/list.module';
 
 @Module({
   imports: [
@@ -12,11 +14,12 @@ import { TaskModule } from './task/task.module';
       username: 'root',
       password: 'root',
       database: 'db_todolist',
-      entities: [Task],
+      entities: [Task, Lists],
       synchronize: true
 
     }),
-    TaskModule
+    TaskModule,
+    ListsModule
 
   ],
   controllers: [],
