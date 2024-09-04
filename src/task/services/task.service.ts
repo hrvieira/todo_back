@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ILike, LessThan, MoreThan, Repository } from 'typeorm';
+import { DeleteResult, ILike, LessThan, MoreThan, Repository } from 'typeorm';
 import { Task } from '../entities/task.entity';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class TaskService {
     let task = await this.taskRepository.findOne({
       where: {
         id,
-      }
+      },
     });
 
     if (!task)
@@ -93,4 +93,14 @@ export class TaskService {
 
     return await this.taskRepository.save(task);
   }
+
+  async delete(id: number): Promise<DeleteResult> {
+    const findTask: Task = await this.findById(id);
+
+    if (!findTask)
+      throw new HttpException('Tema não foi encontrado!', HttpStatus.NOT_FOUND);
+
+    return await this.taskRepository.delete(id);
+  }
+  
 }
