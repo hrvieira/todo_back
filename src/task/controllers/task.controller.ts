@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { TaskService } from "../services/task.service";
 import { Task } from "../entities/task.entity";
 
@@ -30,6 +30,12 @@ export class TaskController {
   @HttpCode(HttpStatus.CREATED)
   create(@Body() task: Task): Promise<Task> {
     return this.taskService.create(task);
+  }
+
+  @Put()
+  @HttpCode(HttpStatus.OK)
+  update(@Body() task: Task): Promise<Task> {
+    return this.taskService.update(task);
   }
   
 }

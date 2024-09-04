@@ -14,6 +14,19 @@ export class TaskService {
     return await this.taskRepository.find();
   }
 
+  async findById(id: number): Promise<Task> {
+    let task = await this.taskRepository.findOne({
+      where: {
+        id,
+      }
+    });
+
+    if (!task)
+      throw new HttpException('Task não encontrada!', HttpStatus.NOT_FOUND);
+
+    return task;
+  }
+
   async findByOrder(order: number): Promise<Task> {
     const task = await this.taskRepository.findOne({
       where: {
@@ -56,7 +69,7 @@ export class TaskService {
   async findByDescription(description: string): Promise<Task[]> {
     if (description.trim() === '') {
       throw new HttpException(
-        'Description cannot be empty',
+        'Descrição não encontrada!',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -69,6 +82,15 @@ export class TaskService {
   }
 
   async create(task: Task): Promise<Task> {
+    return await this.taskRepository.save(task);
+  }
+
+  async update(task: Task): Promise<Task> {
+    const findTask: Task = await this.findById(task.id);
+
+    if (!findTask || !task.id)
+      throw new HttpException('Task não encontrada!', HttpStatus.NOT_FOUND);
+
     return await this.taskRepository.save(task);
   }
 }
