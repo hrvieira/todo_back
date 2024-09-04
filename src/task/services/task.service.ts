@@ -11,13 +11,20 @@ export class TaskService {
   ) {}
 
   async findAll(): Promise<Task[]> {
-    return await this.taskRepository.find();
+    return await this.taskRepository.find({
+            relations:{
+                list: true
+            }
+        });
   }
 
   async findById(id: number): Promise<Task> {
     let task = await this.taskRepository.findOne({
       where: {
         id,
+      },
+      relations: {
+        list: true,
       },
     });
 
@@ -32,6 +39,9 @@ export class TaskService {
       where: {
         order,
       },
+      relations: {
+        list: true,
+      },
     });
 
     if (!task)
@@ -45,6 +55,9 @@ export class TaskService {
       where: {
         order: MoreThan(order),
       },
+      relations: {
+        list: true,
+      },
     });
 
     if (!task)
@@ -57,6 +70,9 @@ export class TaskService {
     const task = await this.taskRepository.find({
       where: {
         order: LessThan(order),
+      },
+      relations: {
+        list: true,
       },
     });
 
@@ -77,6 +93,9 @@ export class TaskService {
     return await this.taskRepository.find({
       where: {
         description: ILike(`%${description}%`),
+      },
+      relations: {
+        list: true,
       },
     });
   }
